@@ -14,17 +14,26 @@ import (
 )
 
 var container *sqlstore.Container
+var db *sql.DB
 
 func init() {
 	store.DeviceProps.Os = lo.ToPtr("Windows")
 	store.DeviceProps.PlatformType = waCompanionReg.DeviceProps_CHROME.Enum()
 }
 
+
 func Setup() {
-	db, err := sql.Open("sqlite", "data.db")
+	var err error
+	db, err = sql.Open("sqlite", "data.db?_pragma=foreign_keys(1)")
 	if err != nil {
 		panic(err)
 	}
+
+	err = createMessagesTable(db)
+	if err != nil {
+		panic(err)
+	}
+
 	var logger waLog.Logger
 	if *config.Env == "dev" {
 		logger = waLog.Stdout("Database", "DEBUG", true)

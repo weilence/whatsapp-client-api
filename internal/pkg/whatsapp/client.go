@@ -33,7 +33,11 @@ func NewClient(jid types.JID) (*Client, error) {
 		logger = waLog.Stdout("Client_"+jid.String(), "INFO", false)
 	}
 
-	client := &Client{Client: whatsmeow.NewClient(device, logger)}
+	originClient := whatsmeow.NewClient(device, logger)
+	handler := newEventHandler(originClient, db)
+	originClient.AddEventHandler(handler.handleEvent)
+
+	client := &Client{Client: originClient}
 	addClient(client)
 	return client, nil
 }

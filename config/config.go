@@ -11,7 +11,7 @@ import (
 
 var (
 	Env  = flag.String("env", "", "environment")
-	Port = flag.Int("port", 0, "port")
+	Port = flag.Int("port", 33687, "port")
 )
 
 var Config = &config{}
