@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -25,7 +26,7 @@ func GroupList(c *utils.HttpContext, req *groupListReq) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	groups, err := client.GetJoinedGroups()
+	groups, err := client.GetJoinedGroups(context.Background())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get joined groups: %w", err)
 	}

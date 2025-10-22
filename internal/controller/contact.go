@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"sort"
 	"strings"
 
@@ -25,7 +26,7 @@ func ContactQuery(c *utils.HttpContext, req *contactQueryReq) (interface{}, erro
 		return nil, err
 	}
 
-	contacts, err := client.Store.Contacts.GetAllContacts()
+	contacts, err := client.Store.Contacts.GetAllContacts(context.Background())
 	if err != nil {
 		return nil, err
 	}

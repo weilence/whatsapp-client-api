@@ -83,7 +83,7 @@ func (c *Client) autoLogin() error {
 }
 
 func (c *Client) Logout() error {
-	err := c.Client.Logout()
+	err := c.Client.Logout(context.Background())
 	if err != nil {
 		return err
 	}

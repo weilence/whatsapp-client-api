@@ -1,6 +1,7 @@
 package whatsapp
 
 import (
+	"context"
 	"database/sql"
 
 	_ "github.com/glebarez/go-sqlite"
@@ -21,7 +22,7 @@ func init() {
 }
 
 func Setup() {
-	db, err := sql.Open("sqlite", "data.db")
+	db, err := sql.Open("sqlite", "data.db?_pragma=foreign_keys(1)")
 	if err != nil {
 		panic(err)
 	}
@@ -33,18 +34,18 @@ func Setup() {
 	}
 
 	container = sqlstore.NewWithDB(db, "sqlite3", logger)
-	err = container.Upgrade()
+	err = container.Upgrade(context.Background())
 	if err != nil {
 		panic(err)
 	}
 }
 
 func GetDevices() ([]*store.Device, error) {
-	return container.GetAllDevices()
+	return container.GetAllDevices(context.Background())
 }
 
 func GetDevice(jid types.JID) (*store.Device, error) {
-	devices, err := container.GetAllDevices()
+	devices, err := container.GetAllDevices(context.Background())
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +56,7 @@ func GetDevice(jid types.JID) (*store.Device, error) {
 }
 
 func DeleteDevice(jid *types.JID) error {
-	devices, err := container.GetAllDevices()
+	devices, err := container.GetAllDevices(context.Background())
 	if err != nil {
 		return err
 	}
@@ -68,5 +69,5 @@ func DeleteDevice(jid *types.JID) error {
 		return nil
 	}
 
-	return container.DeleteDevice(device)
+	return container.DeleteDevice(context.Background(), device)
 }

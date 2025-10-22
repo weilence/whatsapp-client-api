@@ -3,6 +3,7 @@ package router
 import (
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 
 	_ "github.com/glebarez/go-sqlite"
@@ -121,6 +122,8 @@ func RunServer() {
 		Addr:    fmt.Sprintf("127.0.0.1:%d", *config.Port),
 		Handler: handler,
 	}
+
+	slog.Info("server start", "addr", server.Addr)
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		panic(fmt.Errorf("server listen err: %w", err))
